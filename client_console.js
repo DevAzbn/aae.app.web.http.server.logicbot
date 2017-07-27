@@ -28,12 +28,14 @@ var session = app.mdl('session').load(__service_uid, os.platform());
 
 process.stdin.on('data', function(msg){
 	
+	var _now = 'msg_' + azbn.now();
+	
 	var parsed = app.mdl('translator').parse(msg, {
 		service : __service_uid,
 		profile : os.platform(),
 	});
 	
-	app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'msg_' + azbn.now(), parsed);
+	app.mdl('session').set(parsed.meta.service, parsed.meta.profile, _now, parsed);
 	
 	app.mdl('logic_client').eval(parsed, function(error, level, result){
 		
@@ -50,6 +52,8 @@ process.stdin.on('data', function(msg){
 		} else {
 			app.log.info(result);
 		}
+		
+		console.log(app.mdl('session').get(parsed.meta.service, parsed.meta.profile, _now));
 		
 	});
 	
