@@ -24,6 +24,13 @@ azbn.mdl('config').port.https = argv.httpsport || azbn.mdl('config').port.https 
 process.stdin.setEncoding('utf8');
 process.stdin.resume();
 
+var service_config = app.loadJSON('services/' + __service_uid);
+
+app.mdl('logic_api').setDefaults({
+	service : __service_uid,
+	access_token : service_config.access_token,
+})
+
 var session = app.mdl('session').load(__service_uid, os.platform());
 
 process.stdin.on('data', function(msg){
@@ -53,7 +60,7 @@ process.stdin.on('data', function(msg){
 			app.log.info(result);
 		}
 		
-		console.log(app.mdl('session').get(parsed.meta.service, parsed.meta.profile, _now));
+		//console.log(app.mdl('session').get(parsed.meta.service, parsed.meta.profile, _now));
 		
 	});
 	

@@ -6,13 +6,41 @@ var _ = function(app, p) {
 	
 	var ctrl = {
 		
+		defaults : {
+			
+		},
+		
+		setDefaults : function(data) {
+			
+			if(data) {
+				for(var i in data) {
+					ctrl.defaults[i] = data[i];
+				}
+			}
+			
+			return ctrl.defaults;
+			
+		},
+		
 		req : function(method, data, cb) {
+			
+			var _data = {};
+			
+			for(var i in ctrl.defaults) {
+				_data[i] = ctrl.defaults[i];
+			}
+			
+			if(data) {
+				for(var i in data) {
+					_data[i] = data[i];
+				}
+			}
 			
 			var _href = 'http://localhost:' + azbn.mdl('config').port.http + '/api/v1/';
 			
-			data.method = method;
+			_data.method = method;
 			
-			azbn.mdl('web/http').r('POST', _href, data, function(error, response, body){
+			azbn.mdl('web/http').r('POST', _href, _data, function(error, response, body){
 				
 				if(error) {
 					

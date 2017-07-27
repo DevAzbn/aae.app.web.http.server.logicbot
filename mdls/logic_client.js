@@ -39,6 +39,34 @@ var _ = function(app, p) {
 				}
 				break;
 				
+				case 'api' : {
+					
+					app.mdl('logic_api').req('default', {
+						profile : 'test0001',
+					}, function(error, resp, body){
+						
+						if(error) {
+							
+							cb_final(error, body);
+							
+						} else {
+							
+							var _data = JSON.parse(body);
+							
+							cb_final(null, _data);
+							
+						}
+						
+					});
+					
+				}
+				break;
+				
+				case 'exit' : {
+					process.exit(0);
+				}
+				break;
+				
 				default : {
 					error = 'Неизвестная команда';
 				}
