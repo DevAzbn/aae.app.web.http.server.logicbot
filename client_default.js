@@ -17,6 +17,36 @@ azbn.setMdl('config', require('./config/main'));
 azbn.mdl('config').port.http = argv.httpport || azbn.mdl('config').port.http || 3000;
 azbn.mdl('config').port.https = argv.httpsport || azbn.mdl('config').port.https || 3001;
 
+process.stdin.setEncoding('utf8');
+process.stdin.resume();
+
+process.stdin.on('data', function(msg){
+	
+	msg = msg.trim();
+	
+	var msg_arr = msg.split(' ');
+	
+	console.log(msg_arr);
+	
+	if(msg.indexOf('/') == 0) {
+		switch(msg_arr[0]) {
+			
+			case '/hello' : {
+				app.log.info('Ohhh! Hi! How are you?');
+			}
+			break;
+			
+			default : {
+				app.log.error('Неизвестная команда');
+			}
+			break;
+			
+		}
+	}
+	
+});
+
+/*
 app.mdl('logic_api').req('profile/create', {
 	service : 'test',
 	profile : 'test0001',
@@ -73,6 +103,5 @@ app.mdl('logic_api').req('profile/create', {
 		
 	}
 	
-	//console.log(JSON.parse(body));
-	
 });
+*/
