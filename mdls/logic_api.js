@@ -2,11 +2,11 @@
 
 var _ = function(app, p) {
 	
+	var azbn = app.azbn;
+	
 	var ctrl = {
 		
 		req : function(method, data, cb) {
-			
-			var azbn = app.azbn;
 			
 			var _href = 'http://localhost:' + azbn.mdl('config').port.http + '/api/v1/';
 			
