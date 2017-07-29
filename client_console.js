@@ -27,7 +27,7 @@ process.stdin.resume();
 var service_config = app.loadJSON('services/' + __service_uid);
 
 app.mdl('logic_api').setDefaults({
-	service : __service_uid,
+	access_as : __service_uid,
 	access_token : service_config.access_token,
 })
 

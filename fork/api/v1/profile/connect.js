@@ -33,24 +33,24 @@ if(profile.token) {
 	
 	if(profile.token.secret == _data.token.secret) {
 		
-		profile.connected[_data.service] = {
-			service : _data.service,
+		profile.connected[_data.access_as] = {
+			service : _data.access_as,
 			profile : _data.profile,
 			created_at : azbn.now(),
 		};
 		
 		app.saveJSON(__json_prefix + 'profiles/app/' + public_uid, profile);
 		
-		app.mkDataDir(__json_prefix + 'profiles/connected/' + _data.service);
+		app.mkDataDir(__json_prefix + 'profiles/connected/' + _data.access_as);
 		
 		var _connected = {
-			service : _data.service,
+			service : _data.access_as,
 			profile : _data.profile,
 			connected : profile.token.public,
 			created_at : azbn.now(),
 		};
 		
-		app.saveJSON(__json_prefix + 'profiles/connected/' + _data.service + '/' + _data.profile, _connected);
+		app.saveJSON(__json_prefix + 'profiles/connected/' + _data.access_as + '/' + _data.profile, _connected);
 		
 		response = _connected;
 		

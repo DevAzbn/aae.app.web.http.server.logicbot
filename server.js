@@ -90,16 +90,21 @@ require(azbn.mdl('config').path.route + '/main.js')(app, azbn);
 
 // ошибки
 azbn.mdl('express').use(function(req, res, next){
-	res.status(404);
 	app.log.debug('Not found URL: %s', req.url);
-	res.send({ error: 'Not found' });
+	res
+		.status(404)
+		.send({ error: 'Not found' })
+	;
 	return;
 });
 
 azbn.mdl('express').use(function(err, req, res, next){
 	app.log.error('Internal error(%d): %s', res.statusCode, err.message);
 	app.log.error(err.stack);
-	res.status(err.status || 500).send({ error: err.message });
+	res
+		.status(err.status || 500)
+		.send({ error: err.message })
+	;
 	return;
 });
 

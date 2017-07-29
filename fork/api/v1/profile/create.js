@@ -33,8 +33,8 @@ if(profile.connected) {
 	
 }
 
-profile.connected[_data.service] = {
-	service : _data.service,
+profile.connected[_data.access_as] = {
+	service : _data.access_as,
 	profile : _data.profile,
 	created_at : azbn.now(),
 	/*
@@ -51,10 +51,10 @@ profile.token = {
 
 app.saveJSON(__json_prefix + 'profiles/app/' + public_uid, profile);
 
-app.mkDataDir(__json_prefix + 'profiles/connected/' + _data.service);
+app.mkDataDir(__json_prefix + 'profiles/connected/' + _data.access_as);
 
-app.saveJSON(__json_prefix + 'profiles/connected/' + _data.service + '/' + _data.profile, {
-	service : _data.service,
+app.saveJSON(__json_prefix + 'profiles/connected/' + _data.access_as + '/' + _data.profile, {
+	service : _data.access_as,
 	profile : _data.profile,
 	connected : profile.token.public,
 	created_at : azbn.now(),
@@ -64,7 +64,7 @@ process.send({
 	kill_child : 1,
 	app_fork : 1,
 	data : {
-		service : _data.service,
+		service : _data.access_as,
 		profile : _data.profile,
 		token : profile.token,
 	},
