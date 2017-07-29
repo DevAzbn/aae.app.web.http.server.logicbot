@@ -21,24 +21,82 @@ profile
 
 var __json_prefix = __path_prefix + 'data/';
 
-var __db_config = app.loadJSON(__json_prefix + '../config/mysql');
+var __mysql = app.loadJSON(__json_prefix + '../config/mysql');
 
-azbn.mdl('db/mysql', __db_config).connect(function(err){
+azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 	
-	if(err) {
+	if(err_connect_0001) {
 		
 		process.send({
 			kill_child : 1,
 			app_fork : 1,
 			data : {
-				error : err,
+				error : err_connect_0001,
 			},
 		});
 		
 	} else {
 		
-		azbn.mdl('db/mysql').end();
+		azbn.mdl('db/mysql').query("" +
+			"SELECT " +
+				"*" +
+			"FROM " +
+				"`" + __mysql.t.company + "` " +
+			"WHERE " +
+				"1 " +
+				"AND " +
+				"(`" + __mysql.t.company + "`.title LIKE '%" + _data.text + "%') " +
+			"ORDER BY " +
+				"`" + __mysql.t.company + "`.id" +
+			"", function(err_sql_0001, rows, fields) {
+					
+					azbn.mdl('db/mysql').end();
+					
+					if (err_sql_0001) {
+						
+						process.send({
+							kill_child : 1,
+							app_fork : 1,
+							data : {
+								error : err_sql_0001,
+							},
+						});
+						
+					} else if(rows.length == 0) {
+						
+						process.send({
+							kill_child : 1,
+							app_fork : 1,
+							data : {
+								companies : [],
+							},
+						});
+						
+					} else {
+						
+						var __result = [];
+						
+						for(var i = 0; i < rows.length; i++) {
+							
+							__result.push({
+								title : rows[i].title,
+							})
+							
+						}
+						
+						process.send({
+							kill_child : 1,
+							app_fork : 1,
+							data : {
+								companies : __result,
+							},
+						});
+						
+					}
+					
+		});
 		
+		/*
 		process.send({
 			kill_child : 1,
 			app_fork : 1,
@@ -46,6 +104,7 @@ azbn.mdl('db/mysql', __db_config).connect(function(err){
 				state : 'connected',
 			},
 		});
+		*/
 		
 	}
 	

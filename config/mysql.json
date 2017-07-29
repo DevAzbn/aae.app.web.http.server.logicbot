@@ -2,5 +2,8 @@
 	"host" : "localhost",
 	"user" : "aae",
 	"password" : "aae",
-	"database" : "aae"
+	"database" : "aae",
+	"t" : {
+		"company" : "aae_company"
+	}
 }
