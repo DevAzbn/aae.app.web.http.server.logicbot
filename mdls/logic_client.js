@@ -34,8 +34,45 @@ var _ = function(app, p) {
 				
 				case 'search' : {
 					result_semi = 'Поиск ' + parsed.parsed[1];
-					result = 'Поиск ' + parsed.parsed[1] + ' закончен';
+					//result = 'Поиск ' + parsed.parsed[1] + ' закончен';
+					result = '\n';
 					cb_semi(error_semi, 0, result_semi);
+
+					app.mdl('logic_api').req('search/companies', {
+						text : parsed.parsed[1],
+					}, function(error, resp, body){
+						
+						if(error) {
+							
+							cb_final(error, body);
+							
+						} else {
+							
+							var _data = JSON.parse(body);
+							
+							if(_data.response.companies.length) {
+								
+								result = 'Найдено:';
+
+								for(var i in _data.response.companies) {
+
+									result = result + '\n' + _data.response.companies[i].title;
+
+								}
+
+							} else {
+
+								result = 'Ничего не найдено';
+								
+							}
+
+							//cb_final(null, _data);
+							cb_final(null, result);
+							
+						}
+						
+					});
+
 				}
 				break;
 				

@@ -40,13 +40,13 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 			"SELECT " +
 				"*" +
 			"FROM " +
-				"`" + __mysql.t.company + "` " +
+				"`" + __mysql.t.action + "` " +
 			"WHERE " +
 				"1 " +
 				"AND " +
-				"(`" + __mysql.t.company + "`.title LIKE '%" + _data.text + "%') " +
+				"(`" + __mysql.t.action + "`.title LIKE '%" + _data.text + "%') " +
 			"ORDER BY " +
-				"`" + __mysql.t.company + "`.id" +
+				"`" + __mysql.t.action + "`.id" +
 			"", function(err_sql_0001, rows, fields) {
 					
 					azbn.mdl('db/mysql').end();

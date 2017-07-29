@@ -4,6 +4,7 @@
 	"password" : "aae",
 	"database" : "aae",
 	"t" : {
-		"company" : "aae_company"
+		"company" : "aae_company",
+		"action" : "aae_action"
 	}
 }
