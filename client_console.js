@@ -73,8 +73,10 @@ process.stdin.on('data', function(msg){
 					
 					if(result.response.companies.length) {
 						
+						app.log.info('Найдено в организациях:');
+						
 						result.response.companies.forEach(function(item, i ,arr){
-							app.log.info(item.title);
+							console.log(item.title);
 						});
 
 					} else {
