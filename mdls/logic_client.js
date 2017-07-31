@@ -33,10 +33,10 @@ var _ = function(app, p) {
 				break;
 				
 				case 'search' : {
-					result_semi = 'Поиск ' + parsed.parsed[1];
-					//result = 'Поиск ' + parsed.parsed[1] + ' закончен';
-					result = '\n';
-					cb_semi(error_semi, 0, result_semi);
+					//result_semi = 'Поиск ' + parsed.parsed[1];
+					////result = 'Поиск ' + parsed.parsed[1] + ' закончен';
+					//result = '\n';
+					//cb_semi(error_semi, 0, result_semi);
 
 					app.mdl('logic_api').req('search/companies', {
 						text : parsed.parsed[1],
@@ -50,28 +50,15 @@ var _ = function(app, p) {
 							
 							var _data = JSON.parse(body);
 							
-							/*
 							if(_data.response.companies.length) {
 								
-								result = 'Найдено:';
-
-								for(var i in _data.response.companies) {
-
-									result = result + '\n' + _data.response.companies[i].title;
-
-								}
+								cb_final(null, _data);
 
 							} else {
 
-								result = 'Ничего не найдено';
+								cb_final(null, []);
 								
 							}
-							
-							cb_final(null, result);
-							*/
-							
-							cb_final(null, _data);
-							
 							
 						}
 						
@@ -115,7 +102,7 @@ var _ = function(app, p) {
 				
 			}
 			
-			cb_final(error, result);
+			//cb_final(error, result);
 			
 		},
 		

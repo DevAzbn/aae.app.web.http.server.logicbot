@@ -55,9 +55,44 @@ process.stdin.on('data', function(msg){
 	}, function(error, result){
 		
 		if(error) {
+			
 			app.log.error(error);
+
 		} else {
-			app.log.info(result);
+			
+			//result = JSON.parse(result);
+			
+			switch(parsed.command) {
+
+				case null : {
+					app.log.error('Сообщение без команды');
+				}
+				break;
+				
+				case 'search' : {
+					
+					if(result.response.companies.length) {
+						
+						result.response.companies.forEach(function(item, i ,arr){
+							app.log.info(item.title);
+						});
+
+					} else {
+						
+						app.log.warn('Ничего не найдено');
+						
+					}
+					
+				}
+				break;
+
+				default : {
+					app.log.error('Неизвестная команда');
+				}
+				break;
+
+			}
+
 		}
 		
 		//console.log(app.mdl('session').get(parsed.meta.service, parsed.meta.profile, _now));
