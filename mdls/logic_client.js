@@ -18,7 +18,11 @@ var _ = function(app, p) {
 			switch(parsed.command) {
 				
 				case null : {
+					
 					result = 'Сообщение без команды';
+
+					cb_final(null, result);
+
 				}
 				break;
 				
@@ -29,6 +33,29 @@ var _ = function(app, p) {
 				
 				case 'help' : {
 					result = 'Помощь по работе с ботом';
+				}
+				break;
+
+				case 'ping' : {
+
+					app.mdl('logic_api').req('ping', {
+						
+					}, function(error, resp, body){
+						
+						if(error) {
+							
+							cb_final(error, body);
+							
+						} else {
+							
+							var _data = JSON.parse(body);
+							
+							cb_final(null, _data);
+							
+						}
+						
+					});
+
 				}
 				break;
 				
@@ -91,12 +118,20 @@ var _ = function(app, p) {
 				break;
 				
 				case 'exit' : {
+					
+					//cb_final(null, null);
+
 					process.exit(0);
+
 				}
 				break;
 				
 				default : {
+					
 					error = 'Неизвестная команда';
+
+					cb_final(error, null);
+
 				}
 				break;
 				

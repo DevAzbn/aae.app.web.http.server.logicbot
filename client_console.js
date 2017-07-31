@@ -65,7 +65,54 @@ process.stdin.on('data', function(msg){
 			switch(parsed.command) {
 
 				case null : {
+					
 					app.log.error('Сообщение без команды');
+					
+					/*
+					var _state = app.mdl('session').get(parsed.meta.service, parsed.meta.profile, 'state');
+
+					if(_state) {
+						
+						switch(_state) {
+
+							case 'search.waitForString' : {
+								
+
+
+								app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+
+							}
+							break;
+
+							default : {
+
+								app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+
+							}
+							break;
+
+						}
+
+					}
+					*/
+
+				}
+				break;
+
+				case 'ping' : {
+
+					if(result.response.text == 'pong') {
+
+						app.log.info('Сервер отвечает, все в порядке.');
+
+					} else {
+
+						app.log.info('Вернулся странный ответ:', result.response.text);
+
+					}
+
+					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+
 				}
 				break;
 				
@@ -84,12 +131,18 @@ process.stdin.on('data', function(msg){
 						app.log.warn('Ничего не найдено');
 						
 					}
+
+					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
 					
 				}
 				break;
 
 				default : {
+					
 					app.log.error('Неизвестная команда');
+
+					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+
 				}
 				break;
 
