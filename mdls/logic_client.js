@@ -50,6 +50,7 @@ var _ = function(app, p) {
 							
 							var _data = JSON.parse(body);
 							
+							/*
 							if(_data.response.companies.length) {
 								
 								result = 'Найдено:';
@@ -65,9 +66,12 @@ var _ = function(app, p) {
 								result = 'Ничего не найдено';
 								
 							}
-
-							//cb_final(null, _data);
+							
 							cb_final(null, result);
+							*/
+							
+							cb_final(null, _data);
+							
 							
 						}
 						
