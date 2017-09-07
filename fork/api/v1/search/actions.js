@@ -43,10 +43,11 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 				"`" + __mysql.t.action + "` " +
 			"WHERE " +
 				"1 " +
-				"AND " +
-				"(`" + __mysql.t.action + "`.title LIKE '%" + _data.text + "%') " +
+				//"AND " +
+				//"(`" + __mysql.t.action + "`.title LIKE '%" + _data.text + "%') " +
 			"ORDER BY " +
-				"`" + __mysql.t.action + "`.id" +
+				"`" + __mysql.t.action + "`.id " +
+			"LIMIT 5" +
 			"", function(err_sql_0001, rows, fields) {
 					
 					azbn.mdl('db/mysql').end();
@@ -67,7 +68,7 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 							kill_child : 1,
 							app_fork : 1,
 							data : {
-								companies : [],
+								actions : [],
 							},
 						});
 						
@@ -78,6 +79,7 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 						for(var i = 0; i < rows.length; i++) {
 							
 							__result.push({
+								id : rows[i].id,
 								title : rows[i].title,
 							})
 							
@@ -87,7 +89,7 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 							kill_child : 1,
 							app_fork : 1,
 							data : {
-								companies : __result,
+								actions : __result,
 							},
 						});
 						

@@ -108,11 +108,36 @@ var responseTo = function(msg) {
 				case 'actions' : {
 					
 					var resp_text = '';
+					var inline_keyboard = [];
 					
-					resp_text = resp_text + 'Список акций' + '\n';
+					if(result.response && result.response.actions && result.response.actions.length) {
+						
+						resp_text = resp_text + '\nАктуальные акции:\n';
+						
+						result.response.actions.forEach(function(item, i ,arr){
+							
+							resp_text = resp_text + item.title + '\n';
+							
+							inline_keyboard.push([{
+								text : item.title,
+								callback_data : '/action ' + item.id,
+							}]);
+							
+						});
+						
+					} else {
+						
+						resp_text = resp_text + '\nНичего не найдено\n';
+						
+						//inline_keyboard = null;
+						
+					}
 					
 					bot.sendMessage(msg.chat.id, resp_text, {
 						//reply_to_message_id : msg.message_id,
+						reply_markup : (inline_keyboard.length ? {
+							inline_keyboard : inline_keyboard,
+						} : {}),
 					});
 					
 					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
@@ -229,7 +254,7 @@ bot.on('callback_query', function onCallbackQuery(callbackQuery) {
 		from : callbackQuery.from,
 		chat : callbackQuery.message.chat,
 		text : callbackQuery.data,
-		message_id : callbackQuery.message.reply_to_message.message_id,
+		message_id : 0,//callbackQuery.message.reply_to_message.message_id,
 	})
 	/*
 	var action = callbackQuery.data;

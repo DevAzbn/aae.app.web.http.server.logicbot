@@ -47,7 +47,6 @@ var _ = function(app, p) {
 				}
 				break;
 				
-				case 'actions' :
 				case 'action' :
 				case 'comp' :
 				case 'ping' : {
@@ -65,6 +64,37 @@ var _ = function(app, p) {
 							var _data = JSON.parse(body);
 							
 							cb_final(null, _data);
+							
+						}
+						
+					});
+					
+				}
+				break;
+				
+				case 'actions' : {
+					
+					app.mdl('logic_api').req('search/actions', {
+						//text : parsed.parsed[1],
+					}, function(error, resp, body){
+						
+						if(error) {
+							
+							cb_final(error, body);
+							
+						} else {
+							
+							var _data = JSON.parse(body);
+							
+							if(_data.response.actions && _data.response.actions.length) {
+								
+								cb_final(null, _data);
+								
+							} else {
+								
+								cb_final(null, []);
+								
+							}
 							
 						}
 						
