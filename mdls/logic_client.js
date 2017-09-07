@@ -20,24 +20,28 @@ var _ = function(app, p) {
 				case null : {
 					
 					result = 'Сообщение без команды';
-
+					
 					cb_final(null, result);
-
+					
 				}
 				break;
 				
 				case 'start' : {
+					
 					result = 'Здравствуйте! Представьтесь, пожалуйста';
+					
 				}
 				break;
 				
 				case 'help' : {
+					
 					result = 'Помощь по работе с ботом';
+					
 				}
 				break;
-
+				
 				case 'ping' : {
-
+					
 					app.mdl('logic_api').req('ping', {
 						
 					}, function(error, resp, body){
@@ -64,7 +68,7 @@ var _ = function(app, p) {
 					////result = 'Поиск ' + parsed.parsed[1] + ' закончен';
 					//result = '\n';
 					//cb_semi(error_semi, 0, result_semi);
-
+					
 					app.mdl('logic_api').req('search/companies', {
 						text : parsed.parsed[1],
 					}, function(error, resp, body){
@@ -77,12 +81,12 @@ var _ = function(app, p) {
 							
 							var _data = JSON.parse(body);
 							
-							if(_data.response.companies.length) {
+							if(_data.response.companies && _data.response.companies.length) {
 								
 								cb_final(null, _data);
-
+								
 							} else {
-
+								
 								cb_final(null, []);
 								
 							}
@@ -90,7 +94,7 @@ var _ = function(app, p) {
 						}
 						
 					});
-
+					
 				}
 				break;
 				
@@ -120,18 +124,19 @@ var _ = function(app, p) {
 				case 'exit' : {
 					
 					//cb_final(null, null);
-
+					
 					process.exit(0);
-
+					
 				}
 				break;
 				
 				default : {
 					
-					error = 'Неизвестная команда';
-
-					cb_final(error, null);
-
+					//error = 'Неизвестная команда';
+					//cb_final(error, null);
+					
+					cb_final(null, null);
+					
 				}
 				break;
 				
