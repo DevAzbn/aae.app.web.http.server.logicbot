@@ -36,40 +36,7 @@ var bot = new TelegramBotLib(service_config.auth.token, {
 	polling: true,
 });
 
-bot.on('message', function(msg) {
-	//msg.chat.id;
-	// send a message to the chat acknowledging receipt of their message
-	//bot.sendMessage(chatId, 'Received your message');
-	//var session = app.mdl('session').load(__service_uid, os.platform());
-	//console.dir(msg);
-	/*
-	{
-		"message_id": 3,
-		"from": {
-			"id": 136573652,
-			"is_bot": false,
-			"first_name": "Alexander",
-			"last_name": "Zybin",
-			"username": "azbn_ru",
-			"language_code": "ru-RU"
-		},
-		"chat": {
-			"id": -45438138,
-			"title": "AzbnBotChat",
-			"type": "group",
-			"all_members_are_administrators": true
-		},
-		"date": 1504776370,
-		"text": "/test",
-		"entities": [
-			{
-				"offset": 0,
-				"length": 5,
-				"type": "bot_command"
-			}
-		]
-	}
-	*/
+var responseTo = function(msg) {
 	
 	var session = app.mdl('session').load(__service_uid, msg.from.id);
 	
@@ -104,7 +71,33 @@ bot.on('message', function(msg) {
 					var resp_text = result;
 					
 					bot.sendMessage(msg.chat.id, resp_text, {
-						reply_to_message_id : msg.message_id,
+						//reply_to_message_id : msg.message_id,
+						/*
+						reply_markup : JSON.stringify({
+							keyboard: [
+								['/help'],
+								['/actions', '/comps'],
+							],
+						}),
+						*/
+						/*
+						reply_markup : {
+							inline_keyboard : [
+								[
+									{
+										text : 'Акция 1',
+										callback_data : '/action 1',
+									},
+								],
+								[
+									{
+										text : 'Компания 2',
+										callback_data : '/comp 2',
+									},
+								],
+							],
+						},
+						*/
 					});
 					
 					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
@@ -119,7 +112,7 @@ bot.on('message', function(msg) {
 					resp_text = resp_text + 'Список акций' + '\n';
 					
 					bot.sendMessage(msg.chat.id, resp_text, {
-						reply_to_message_id : msg.message_id,
+						//reply_to_message_id : msg.message_id,
 					});
 					
 					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
@@ -127,8 +120,36 @@ bot.on('message', function(msg) {
 				}
 				break;
 				
-				case 'action' :
-				case 'comp' :
+				case 'action' : {
+					
+					var resp_text = '';
+					
+					resp_text = resp_text + 'Акция ' + parsed.parsed[1] + '\n';
+					
+					bot.sendMessage(msg.chat.id, resp_text, {
+						//reply_to_message_id : msg.message_id,
+					});
+					
+					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+					
+				}
+				break;
+				
+				case 'comp' : {
+					
+					var resp_text = '';
+					
+					resp_text = resp_text + 'Компания ' + parsed.parsed[1] + '\n';
+					
+					bot.sendMessage(msg.chat.id, resp_text, {
+						//reply_to_message_id : msg.message_id,
+					});
+					
+					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+					
+				}
+				break;
+				
 				case 'ping' : {
 					
 					var resp_text = '';
@@ -144,7 +165,7 @@ bot.on('message', function(msg) {
 					}
 					
 					bot.sendMessage(msg.chat.id, resp_text, {
-						reply_to_message_id : msg.message_id,
+						//reply_to_message_id : msg.message_id,
 					});
 					
 					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
@@ -173,7 +194,7 @@ bot.on('message', function(msg) {
 					}
 					
 					bot.sendMessage(msg.chat.id, resp_text, {
-						reply_to_message_id : msg.message_id,
+						//reply_to_message_id : msg.message_id,
 					});
 					
 					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
@@ -198,20 +219,100 @@ bot.on('message', function(msg) {
 		
 	});
 	
-	/*
-	bot.sendMessage(msg.chat.id, 'Reply to ' + msg.message_id + ': ' + msg.text, {
-		reply_to_message_id : msg.message_id,
-	});
-	*/
+};
+
+bot.on('message', responseTo);
+
+bot.on('callback_query', function onCallbackQuery(callbackQuery) {
 	
+	responseTo({
+		from : callbackQuery.from,
+		chat : callbackQuery.message.chat,
+		text : callbackQuery.data,
+		message_id : callbackQuery.message.reply_to_message.message_id,
+	})
+	/*
+	var action = callbackQuery.data;
+	var msg = callbackQuery.message;
+	
+	const opts = {
+		chat_id: msg.chat.id,
+		message_id: msg.message_id,
+	};
+	
+	bot.editMessageText(text, opts);
+	*/
 });
 
 
 
 
-
-
 /*
+
+
+
+function(msg) {
+	//msg.chat.id;
+	// send a message to the chat acknowledging receipt of their message
+	//bot.sendMessage(chatId, 'Received your message');
+	//var session = app.mdl('session').load(__service_uid, os.platform());
+	//console.dir(msg);
+	
+	{
+		"message_id": 3,
+		"from": {
+			"id": 136573652,
+			"is_bot": false,
+			"first_name": "Alexander",
+			"last_name": "Zybin",
+			"username": "azbn_ru",
+			"language_code": "ru-RU"
+		},
+		"chat": {
+			"id": -45438138,
+			"title": "AzbnBotChat",
+			"type": "group",
+			"all_members_are_administrators": true
+		},
+		"date": 1504776370,
+		"text": "/test",
+		"entities": [
+			{
+				"offset": 0,
+				"length": 5,
+				"type": "bot_command"
+			}
+		]
+	}
+	
+	
+	
+	
+	
+	bot.sendMessage(msg.chat.id, 'Reply to ' + msg.message_id + ': ' + msg.text, {
+		reply_to_message_id : msg.message_id,
+	});
+	
+	bot.on('callback_query', function onCallbackQuery(callbackQuery) {
+	  const action = callbackQuery.data;
+	  const msg = callbackQuery.message;
+	  const opts = {
+		chat_id: msg.chat.id,
+		message_id: msg.message_id,
+	  };
+	  let text;
+
+	  if (action === 'edit') {
+		text = 'Edited Text';
+	  }
+
+	  bot.editMessageText(text, opts);
+	});
+	
+	
+	
+}
+
 process.stdin.on('data', function(msg){
 	
 	var _now = 'msg_' + azbn.now();
