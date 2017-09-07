@@ -98,6 +98,60 @@ bot.on('message', function(msg) {
 			
 			switch(parsed.command) {
 				
+				case 'help' :
+				case 'start' : {
+					
+					var resp_text = result;
+					
+					bot.sendMessage(msg.chat.id, resp_text, {
+						reply_to_message_id : msg.message_id,
+					});
+					
+					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+					
+				}
+				break;
+				
+				case 'actions' : {
+					
+					var resp_text = '';
+					
+					resp_text = resp_text + 'Список акций' + '\n';
+					
+					bot.sendMessage(msg.chat.id, resp_text, {
+						reply_to_message_id : msg.message_id,
+					});
+					
+					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+					
+				}
+				break;
+				
+				case 'action' :
+				case 'comp' :
+				case 'ping' : {
+					
+					var resp_text = '';
+					
+					if(result.response.text == 'pong') {
+						
+						resp_text = resp_text + 'Сервер отвечает, все в порядке.' + '\n';
+						
+					} else {
+						
+						resp_text = resp_text + 'Вернулся странный ответ: ' + result.response.text + '\n';
+						
+					}
+					
+					bot.sendMessage(msg.chat.id, resp_text, {
+						reply_to_message_id : msg.message_id,
+					});
+					
+					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+					
+				}
+				break;
+				
 				case 'search' : {
 					
 					var resp_text = '';

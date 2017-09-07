@@ -26,20 +26,30 @@ var _ = function(app, p) {
 				}
 				break;
 				
+				case 'help' :
 				case 'start' : {
 					
-					result = 'Здравствуйте! Представьтесь, пожалуйста';
+					result = '' +
+						'Здравствуйте!\n\n' +
+						'Краткая справка по работе с ботом:\n' +
+						'/start или /help - эта справка\n' +
+						'/actions - список актуальных акций\n' +
+						'/action <номер> - подробно о акции под номером\n' +
+						'/search <название> - поиск организации по названию\n' +
+						'/comp <номер> - просмотр данных о компании под номером\n' +
+						'/ping - проверка связи\n' +
+						//'\n' +
+						''
+					;
+					
+					cb_final(null, result);
 					
 				}
 				break;
 				
-				case 'help' : {
-					
-					result = 'Помощь по работе с ботом';
-					
-				}
-				break;
-				
+				case 'actions' :
+				case 'action' :
+				case 'comp' :
 				case 'ping' : {
 					
 					app.mdl('logic_api').req('ping', {
@@ -59,7 +69,7 @@ var _ = function(app, p) {
 						}
 						
 					});
-
+					
 				}
 				break;
 				
