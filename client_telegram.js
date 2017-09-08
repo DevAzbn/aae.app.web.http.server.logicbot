@@ -38,6 +38,8 @@ var bot = new TelegramBotLib(service_config.auth.token, {
 
 var responseTo = function(msg) {
 	
+	//console.dir(msg);
+	
 	var session = app.mdl('session').load(__service_uid, msg.from.id);
 	
 	var parsed = app.mdl('translator').parse(msg.text, {
@@ -47,11 +49,13 @@ var responseTo = function(msg) {
 	
 	app.mdl('logic_client').eval(parsed, function(error, level, result){
 		
+		/*
 		if(error) {
 			app.log.error(error);
 		} else {
 			app.log.info(result, '.....', level + '%');
 		}
+		*/
 		
 	}, function(error, result){
 		
@@ -256,17 +260,7 @@ bot.on('callback_query', function onCallbackQuery(callbackQuery) {
 		text : callbackQuery.data,
 		message_id : 0,//callbackQuery.message.reply_to_message.message_id,
 	})
-	/*
-	var action = callbackQuery.data;
-	var msg = callbackQuery.message;
 	
-	const opts = {
-		chat_id: msg.chat.id,
-		message_id: msg.message_id,
-	};
-	
-	bot.editMessageText(text, opts);
-	*/
 });
 
 
@@ -275,14 +269,6 @@ bot.on('callback_query', function onCallbackQuery(callbackQuery) {
 /*
 
 
-
-function(msg) {
-	//msg.chat.id;
-	// send a message to the chat acknowledging receipt of their message
-	//bot.sendMessage(chatId, 'Received your message');
-	//var session = app.mdl('session').load(__service_uid, os.platform());
-	//console.dir(msg);
-	
 	{
 		"message_id": 3,
 		"from": {
@@ -307,7 +293,10 @@ function(msg) {
 				"length": 5,
 				"type": "bot_command"
 			}
-		]
+		],
+		"sticker" : {
+			
+		}
 	}
 	
 	
@@ -333,131 +322,5 @@ function(msg) {
 
 	  bot.editMessageText(text, opts);
 	});
-	
-	
-	
-}
 
-process.stdin.on('data', function(msg){
-	
-	var _now = 'msg_' + azbn.now();
-	
-	var parsed = app.mdl('translator').parse(msg, {
-		service : __service_uid,
-		profile : os.platform(),
-	});
-	
-	app.mdl('session').set(parsed.meta.service, parsed.meta.profile, _now, parsed);
-	
-	app.mdl('logic_client').eval(parsed, function(error, level, result){
-		
-		if(error) {
-			app.log.error(error);
-		} else {
-			app.log.info(result, '.....', level + '%');
-		}
-		
-	}, function(error, result){
-		
-		if(error) {
-			
-			app.log.error(error);
-			
-		} else {
-			
-			//result = JSON.parse(result);
-			
-			switch(parsed.command) {
-				
-				case null : {
-					
-					app.log.error('Сообщение без команды');
-					
-					
-					var _state = app.mdl('session').get(parsed.meta.service, parsed.meta.profile, 'state');
-					
-					if(_state) {
-						
-						switch(_state) {
-							
-							case 'search.waitForString' : {
-								
-								
-								
-								app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
-								
-							}
-							break;
-							
-							default : {
-								
-								app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
-								
-							}
-							break;
-							
-						}
-						
-					}
-					
-					
-				}
-				break;
-				
-				case 'ping' : {
-					
-					if(result.response.text == 'pong') {
-						
-						app.log.info('Сервер отвечает, все в порядке.');
-						
-					} else {
-						
-						app.log.info('Вернулся странный ответ:', result.response.text);
-						
-					}
-					
-					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
-					
-				}
-				break;
-				
-				case 'search' : {
-					
-					if(result.response && result.response.companies && result.response.companies.length) {
-						
-						app.log.info('Найдено в организациях:');
-						
-						result.response.companies.forEach(function(item, i ,arr){
-							console.log(item.title);
-						});
-						
-					} else {
-						
-						app.log.warn('Ничего не найдено');
-						
-					}
-					
-					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
-					
-				}
-				break;
-				
-				default : {
-					
-					app.log.error('Неизвестная команда');
-					
-					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
-					
-				}
-				break;
-				
-			}
-			
-		}
-		
-		//console.log(app.mdl('session').get(parsed.meta.service, parsed.meta.profile, _now));
-		
-	});
-	
-});
 */

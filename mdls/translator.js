@@ -10,7 +10,7 @@ var _ = function(app, p) {
 			
 			var result = {};
 			
-			var _str = str.trim();
+			var _str = (str || '').trim();
 			
 			var _str_arr = _str.split(' ');
 			
