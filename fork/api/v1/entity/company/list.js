@@ -1,6 +1,6 @@
 'use strict';
 
-var __path_prefix = '../../../../../';
+var __path_prefix = '../../../../../../';
 
 var azbn = new require(__dirname + '/' + __path_prefix + '../../../../../system/bootstrap')({
 	
@@ -46,7 +46,7 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 				"AND " +
 				"(`" + __mysql.t.company + "`.title LIKE '%" + _data.text + "%') " +
 			"ORDER BY " +
-				"`" + __mysql.t.company + "`.id" +
+				"`" + __mysql.t.company + "`.id " +
 			"", function(err_sql_0001, rows, fields) {
 					
 					azbn.mdl('db/mysql').end();
@@ -78,6 +78,7 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 						for(var i = 0; i < rows.length; i++) {
 							
 							__result.push({
+								id : rows[i].id,
 								title : rows[i].title,
 							})
 							
@@ -108,6 +109,3 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 	}
 	
 });
-
-
-

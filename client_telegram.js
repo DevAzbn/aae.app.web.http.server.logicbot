@@ -76,14 +76,14 @@ var responseTo = function(msg) {
 					
 					bot.sendMessage(msg.chat.id, resp_text, {
 						//reply_to_message_id : msg.message_id,
-						/*
+						
 						reply_markup : JSON.stringify({
 							keyboard: [
-								['/help'],
-								['/actions', '/comps'],
+								['/help', '/ping'],
+								['/actions', '/companies'],
 							],
 						}),
-						*/
+						
 						/*
 						reply_markup : {
 							inline_keyboard : [
@@ -96,12 +96,44 @@ var responseTo = function(msg) {
 								[
 									{
 										text : 'Компания 2',
-										callback_data : '/comp 2',
+										callback_data : '/company 2',
 									},
 								],
 							],
 						},
 						*/
+					});
+					
+					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
+					
+				}
+				break;
+				
+				case 'action' : {
+					
+					var resp_text = '';
+					
+					if(result.response && result.response.actions && result.response.actions.length) {
+						
+						result.response.actions.forEach(function(item, i ,arr){
+							
+							resp_text = resp_text + item.title + '\n';
+							
+						});
+						
+					} else {
+						
+						resp_text = resp_text + '\nНичего не найдено\n';
+						
+						//inline_keyboard = null;
+						
+					}
+					
+					bot.sendMessage(msg.chat.id, resp_text, {
+						//reply_to_message_id : msg.message_id,
+						//reply_markup : (inline_keyboard.length ? {
+						//	inline_keyboard : inline_keyboard,
+						//} : {}),
 					});
 					
 					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
@@ -116,11 +148,11 @@ var responseTo = function(msg) {
 					
 					if(result.response && result.response.actions && result.response.actions.length) {
 						
-						resp_text = resp_text + '\nАктуальные акции:\n';
+						resp_text = resp_text + '\nМы подобрали наиболее актуальные акции:\n';
 						
 						result.response.actions.forEach(function(item, i ,arr){
 							
-							resp_text = resp_text + item.title + '\n';
+							//resp_text = resp_text + item.title + '\n';
 							
 							inline_keyboard.push([{
 								text : item.title,
@@ -139,6 +171,7 @@ var responseTo = function(msg) {
 					
 					bot.sendMessage(msg.chat.id, resp_text, {
 						//reply_to_message_id : msg.message_id,
+						//keyboard: null,
 						reply_markup : (inline_keyboard.length ? {
 							inline_keyboard : inline_keyboard,
 						} : {}),
@@ -149,14 +182,31 @@ var responseTo = function(msg) {
 				}
 				break;
 				
-				case 'action' : {
+				case 'company' : {
 					
 					var resp_text = '';
 					
-					resp_text = resp_text + 'Акция ' + parsed.parsed[1] + '\n';
+					if(result.response && result.response.companies && result.response.companies.length) {
+						
+						result.response.companies.forEach(function(item, i ,arr){
+							
+							resp_text = resp_text + item.title + '\n';
+							
+						});
+						
+					} else {
+						
+						resp_text = resp_text + '\nНичего не найдено\n';
+						
+						//inline_keyboard = null;
+						
+					}
 					
 					bot.sendMessage(msg.chat.id, resp_text, {
 						//reply_to_message_id : msg.message_id,
+						//reply_markup : (inline_keyboard.length ? {
+						//	inline_keyboard : inline_keyboard,
+						//} : {}),
 					});
 					
 					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
@@ -164,14 +214,38 @@ var responseTo = function(msg) {
 				}
 				break;
 				
-				case 'comp' : {
+				case 'companies' : {
 					
 					var resp_text = '';
+					var inline_keyboard = [];
 					
-					resp_text = resp_text + 'Компания ' + parsed.parsed[1] + '\n';
+					if(result.response && result.response.companies && result.response.companies.length) {
+						
+						resp_text = resp_text + '\nНайдено в организациях:\n';
+						
+						result.response.companies.forEach(function(item, i ,arr){
+							
+							//resp_text = resp_text + item.title + '\n';
+							
+							inline_keyboard.push([{
+								text : item.title,
+								callback_data : '/company ' + item.id,
+							}]);
+							
+						});
+						
+					} else {
+						
+						resp_text = resp_text + '\nНичего не найдено\n';
+						
+					}
 					
 					bot.sendMessage(msg.chat.id, resp_text, {
 						//reply_to_message_id : msg.message_id,
+						//keyboard: null,
+						reply_markup : (inline_keyboard.length ? {
+							inline_keyboard : inline_keyboard,
+						} : {}),
 					});
 					
 					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
@@ -190,35 +264,6 @@ var responseTo = function(msg) {
 					} else {
 						
 						resp_text = resp_text + 'Вернулся странный ответ: ' + result.response.text + '\n';
-						
-					}
-					
-					bot.sendMessage(msg.chat.id, resp_text, {
-						//reply_to_message_id : msg.message_id,
-					});
-					
-					app.mdl('session').set(parsed.meta.service, parsed.meta.profile, 'state', null);
-					
-				}
-				break;
-				
-				case 'search' : {
-					
-					var resp_text = '';
-					
-					if(result.response && result.response.companies && result.response.companies.length) {
-						
-						resp_text = resp_text + '\nНайдено в организациях:\n';
-						
-						result.response.companies.forEach(function(item, i ,arr){
-							
-							resp_text = resp_text + item.title + '\n';
-							
-						});
-						
-					} else {
-						
-						resp_text = resp_text + '\nНичего не найдено\n';
 						
 					}
 					

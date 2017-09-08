@@ -1,6 +1,6 @@
 'use strict';
 
-var __path_prefix = '../../../../../';
+var __path_prefix = '../../../../../../';
 
 var azbn = new require(__dirname + '/' + __path_prefix + '../../../../../system/bootstrap')({
 	
@@ -40,14 +40,14 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 			"SELECT " +
 				"*" +
 			"FROM " +
-				"`" + __mysql.t.action + "` " +
+				"`" + __mysql.t.company + "` " +
 			"WHERE " +
 				"1 " +
-				//"AND " +
-				//"(`" + __mysql.t.action + "`.title LIKE '%" + _data.text + "%') " +
+				"AND " +
+				"(`" + __mysql.t.company + "`.id = '" + _data.entity.id + "') " +
 			"ORDER BY " +
-				"`" + __mysql.t.action + "`.id " +
-			"LIMIT 5" +
+				"`" + __mysql.t.company + "`.id " +
+			"LIMIT 1 " +
 			"", function(err_sql_0001, rows, fields) {
 					
 					azbn.mdl('db/mysql').end();
@@ -68,7 +68,7 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 							kill_child : 1,
 							app_fork : 1,
 							data : {
-								actions : [],
+								companies : [],
 							},
 						});
 						
@@ -89,7 +89,7 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 							kill_child : 1,
 							app_fork : 1,
 							data : {
-								actions : __result,
+								companies : __result,
 							},
 						});
 						
@@ -110,6 +110,3 @@ azbn.mdl('db/mysql', __mysql).connect(function(err_connect_0001){
 	}
 	
 });
-
-
-

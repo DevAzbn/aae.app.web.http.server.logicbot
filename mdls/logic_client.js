@@ -35,9 +35,10 @@ var _ = function(app, p) {
 						'/start или /help - эта справка\n' +
 						'/actions - список актуальных акций\n' +
 						'/action <номер> - подробно о акции под номером\n' +
-						'/search <название> - поиск организации по названию\n' +
-						'/comp <номер> - просмотр данных о компании под номером\n' +
+						'/companies <название> - поиск организации по названию\n' +
+						'/company <номер> - просмотр данных о компании под номером\n' +
 						'/ping - проверка связи\n' +
+						'/exit - выключение бота\n' +
 						//'\n' +
 						''
 					;
@@ -47,8 +48,6 @@ var _ = function(app, p) {
 				}
 				break;
 				
-				case 'action' :
-				case 'comp' :
 				case 'ping' : {
 					
 					app.mdl('logic_api').req('ping', {
@@ -72,9 +71,35 @@ var _ = function(app, p) {
 				}
 				break;
 				
+				case 'action' :
+				case 'company' : {
+					
+					app.mdl('logic_api').req('entity/' + parsed.command + '/item', {
+						entity : {
+							id : parsed.parsed[1],
+						},
+					}, function(error, resp, body){
+						
+						if(error) {
+							
+							cb_final(error, body);
+							
+						} else {
+							
+							var _data = JSON.parse(body);
+							
+							cb_final(null, _data);
+							
+						}
+						
+					});
+					
+				}
+				break;
+				
 				case 'actions' : {
 					
-					app.mdl('logic_api').req('search/actions', {
+					app.mdl('logic_api').req('entity/action/list', {
 						//text : parsed.parsed[1],
 					}, function(error, resp, body){
 						
@@ -103,13 +128,13 @@ var _ = function(app, p) {
 				}
 				break;
 				
-				case 'search' : {
+				case 'companies' : {
 					//result_semi = 'Поиск ' + parsed.parsed[1];
 					////result = 'Поиск ' + parsed.parsed[1] + ' закончен';
 					//result = '\n';
 					//cb_semi(error_semi, 0, result_semi);
 					
-					app.mdl('logic_api').req('search/companies', {
+					app.mdl('logic_api').req('entity/company/list', {
 						text : parsed.parsed[1],
 					}, function(error, resp, body){
 						
